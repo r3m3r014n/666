@@ -1,0 +1,88 @@
+/* RADIANCE SURVIVAL LAYER */
+/* These variables shift with user mood/energy */
+
+:root {
+    /* Base survival */
+    --radiance-survival: #ffd700;
+    --kindness-survival: #ff6b9d;
+    --void-survival: #000000;
+    
+    /* Dynamic mood variables - changed by JS */
+    --mood-primary: hsl(0, 0%, 50%);
+    --mood-secondary: hsl(180, 50%, 50%);
+    --mood-glow: 0 0 20px rgba(255,255,255,0.1);
+    --breath-intensity: 0.5;
+    --user-control-level: 0;
+}
+
+/* Mood-based shifts */
+body.mood-joy {
+    --mood-primary: hsl(45, 100%, 60%);
+    --mood-secondary: hsl(60, 100%, 70%);
+    --mood-glow: 0 0 40px rgba(255,215,0,0.3);
+}
+
+body.mood-calm {
+    --mood-primary: hsl(180, 60%, 50%);
+    --mood-secondary: hsl(200, 60%, 60%);
+    --mood-glow: 0 0 30px rgba(78,205,196,0.3);
+}
+
+body.mood-passion {
+    --mood-primary: hsl(340, 80%, 60%);
+    --mood-secondary: hsl(0, 80%, 70%);
+    --mood-glow: 0 0 35px rgba(255,107,157,0.3);
+}
+
+/* Gratification animations */
+@keyframes radiate {
+    0% { box-shadow: 0 0 0 0 rgba(255,215,0,0.4); }
+    70% { box-shadow: 0 0 0 20px rgba(255,215,0,0); }
+    100% { box-shadow: 0 0 0 0 rgba(255,215,0,0); }
+}
+
+.gratification-pulse {
+    animation: radiate 2s infinite;
+}
+
+/* Unpredictable layouts */
+.random-shift {
+    transform: translate(
+        calc(var(--random-x) * 10px), 
+        calc(var(--random-y) * 10px)
+    );
+}
+
+/* Ephemeral borders */
+.transient-border {
+    border-color: var(--mood-primary);
+    transition: border-color 3s ease;
+}
+
+/* Kindness typography */
+.gentle-text {
+    font-weight: 300;
+    letter-spacing: 0.05em;
+    line-height: 1.8;
+}
+
+/* Control illusion */
+.user-control {
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.user-control:hover {
+    transform: scale(calc(1 + var(--user-control-level)));
+}
+
+/* No-save indication */
+.ephemeral-glow {
+    animation: fadeInOut 10s infinite;
+}
+
+@keyframes fadeInOut {
+    0%, 100% { opacity: 0.3; }
+    50% { opacity: 0.8; }
+}
+
