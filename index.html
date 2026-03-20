@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="en" data-session="void">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="color-scheme" content="dark only">
+    <title>RADIANCE // TRANSIENT CODES</title>
+    
+    <style>
+        /* CRITICAL: No persistence styles */
+        :root {
+            color-scheme: dark only;
+            --void: #0a0a0a;
+            --radiance: #ffd700;
+            --kindness: #ff6b9d;
+            --positivity: #4ecdc4;
+            --gratitude: #ffe66d;
+            --current-hue: 0;
+            --breath: 0;
+        }
+        
+        @media (prefers-color-scheme: light) {
+            html { opacity: 0 !important; pointer-events: none !important; }
+        }
+        
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            background: radial-gradient(circle at 50% 50%, #1a1a1a 0%, #000 100%);
+            color: #e0e0e0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            min-height: 100vh;
+            overflow-x: hidden;
+            animation: breathe 8s ease-in-out infinite;
+        }
+        
+        @keyframes breathe {
+            0%, 100% { --breath: 0; }
+            50% { --breath: 1; }
+        }
+        
+        /* POLICY MODAL - Mandatory */
+        .policy-veil {
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.95);
+            z-index: 10000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        
+        .policy-veil.hidden { display: none; }
+        
+        .policy-scroll {
+            max-width: 600px;
+            max-height: 80vh;
+            background: #111;
+            border: 1px solid #333;
+            border-radius: 20px;
+            padding: 40px;
+            overflow-y: auto;
+            box-shadow: 0 0 50px rgba(255,215,0,0.1);
+        }
+        
+        .policy-scroll h2 {
+            color: var(--radiance);
+            margin-bottom: 20px;
+            text-align: center;
+            font-weight: 300;
+            letter-spacing: 0.2em;
+        }
+        
+        .policy-scroll p {
+            margin-bottom: 15px;
+            line-height: 1.8;
+            color: #aaa;
+            font-size: 0.95rem;
+        }
+        
+        .policy-scroll .highlight {
+            color: var(--kindness);
+            font-weight: 600;
+        }
+        
+        .agreement-btn {
+            width: 100%;
+            padding: 20px;
+            margin-top: 30px;
+            background: transparent;
+            border: 2px solid var(--positivity);
+            color: var(--positivity);
+            border-radius: 50px;
+            cursor: pointer;
+            font-size: 1.1rem;
+            transition: all 0.3s;
+        }
+        
+        .agreement-btn:hover {
+            background: var(--positivity);
+            color: #000;
+            box-shadow: 0 0 30px var(--positivity);
+        }
+        
+        /* RADIANCE CONTAINER */
+        #radiance-field {
+            position: relative;
+            min-height: 100vh;
+            padding: 40px 20px;
+        }
+        
+        /* WARM WELCOME */
+        .welcome-pulse {
+            text-align: center;
+            margin-bottom: 60px;
+            animation: gentlePulse 4s infinite;
+        }
+        
+        @keyframes gentlePulse {
+            0%, 100% { opacity: 0.8; transform: scale(1); }
+            50% { opacity: 1; transform: scale(1.02); }
+        }
+        
+        .welcome-pulse h1 {
+            font-size: 2.5rem;
+            font-weight: 200;
+            background: linear-gradient(45deg, var(--radiance), var(--kindness), var(--positivity));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 10px;
+        }
+        
+        .kindness-note {
+            color: #888;
+            font-style: italic;
+            margin-top: 10px;
+        }
+        
+        /* CODE GENERATOR ORBS */
+        .orb-garden {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 30px;
+            max-width: 1000px;
+            margin: 0 auto 60px;
+        }
+        
+        .radiance-orb {
+            aspect-ratio: 1;
+            border-radius: 50%;
+            background: radial-gradient(circle at 30% 30%, rgba(255,255,255,0.2), transparent);
+            border: 2px solid rgba(255,255,255,0.1);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .radiance-orb::before {
+            content: '';
+            position: absolute;
+            inset: -50%;
+            background: conic-gradient(from 0deg, transparent, var(--current-color, #fff), transparent);
+            animation: rotate 10s linear infinite;
+            opacity: 0;
+            transition: opacity 0.5s;
+        }
+        
+        .radiance-orb:hover::before {
+            opacity: 0.3;
+        }
+        
+        .radiance-orb:hover {
+            transform: scale(1.1) translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+            border-color: var(--current-color, #fff);
+        }
+        
+        .orb-label {
+            position: relative;
+            z-index: 2;
+            font-size: 0.9rem;
+            color: #888;
+            margin-bottom: 10px;
+        }
+        
+        .orb-code {
+            position: relative;
+            z-index: 2;
+            font-family: 'Courier New', monospace;
+            font-size: 1.2rem;
+            color: #fff;
+            letter-spacing: 2px;
+            opacity: 0;
+            transform: translateY(10px);
+            transition: all 0.3s;
+        }
+        
+        .radiance-orb.revealed .orb-code {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .radiance-orb.revealed {
+            background: rgba(255,255,255,0.05);
+        }
+        
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+        
+        /* CODE JOURNAL REMINDER */
+        .gentle-reminder {
+            background: rgba(255,255,255,0.03);
+            border-left: 4px solid var(--gratitude);
+            padding: 30px;
+            margin: 40px auto;
+            max-width: 800px;
+            border-radius: 0 15px 15px 0;
+        }
+        
+        .gentle-reminder h3 {
+            color: var(--gratitude);
+            margin-bottom: 15px;
+            font-weight: 400;
+        }
+        
+        .gentle-reminder p {
+            color: #aaa;
+            line-height: 1.8;
+            margin-bottom: 10px;
+        }
+        
+        .code-display {
+            font-family: 'Courier New', monospace;
+            background: #000;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            color: var(--positivity);
+            font-size: 1.3rem;
+            letter-spacing: 3px;
+            text-align: center;
+            border: 1px dashed #333;
+        }
+        
+        /* GRATIFICATION MOMENTS */
+        .gratitude-shower {
+            position: fixed;
+            pointer-events: none;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 100;
+        }
+        
+        .gratitude-particle {
+            position: absolute;
+            font-size: 1.5rem;
+            animation: fall linear forwards;
+        }
+        
+        @keyframes fall {
+            to {
+                transform: translateY(100vh) rotate(360deg);
+                opacity: 0;
+            }
+        }
+        
+        /* COMPILE SECTION */
+        .compile-sanctuary {
+            max-width: 600px;
+            margin: 80px auto;
+            text-align: center;
+            padding: 60px 40px;
+            background: rgba(255,255,255,0.02);
+            border-radius: 30px;
+            border: 1px solid rgba(255,255,255,0.05);
+        }
+        
+        .compile-sanctuary h2 {
+            color: var(--radiance);
+            margin-bottom: 20px;
+            font-weight: 300;
+        }
+        
+        .eternal-input {
+            width: 100%;
+            padding: 20px;
+            margin: 20px 0;
+            background: rgba(0,0,0,0.5);
+            border: 1px solid #333;
+            color: #fff;
+            border-radius: 10px;
+            font-family: 'Courier New', monospace;
+            font-size: 1.1rem;
+        }
+        
+        .radiate-btn {
+            padding: 20px 60px;
+            background: linear-gradient(45deg, var(--radiance), var(--kindness));
+            border: none;
+            color: #000;
+            font-weight: 600;
+            border-radius: 50px;
+            cursor: pointer;
+            font-size: 1.1rem;
+            transition: transform 0.3s;
+        }
+        
+        .radiate-btn:hover {
+            transform: scale(1.05);
+        }
+        
+        /* EPHEMERAL NOTICE */
+        .transient-notice {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0,0,0,0.8);
+            padding: 15px 30px;
+            border-radius: 50px;
+            border: 1px solid #333;
+            color: #666;
+            font-size: 0.85rem;
+            z-index: 1000;
+        }
+        
+        /* Responsive Kindness */
+        @media (max-width: 768px) {
+            .welcome-pulse h1 { font-size: 1.8rem; }
+            .orb-garden { grid-template-columns: repeat(2, 1fr); }
+        }
+    </style>
+    
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- POLICY VEIL - Must Accept to Enter -->
+    <div class="policy-veil" id="policyVeil">
+        <div class="policy-scroll">
+            <h2>✦ Agreement of Transience ✦</h2>
+            <p>Welcome to the Radiance Codex, a sanctuary of <span class="highlight">positive energy</span> and <span class="highlight">gentle transformation</span>.</p>
+            
+            <p>Before you enter this space of kindness, please understand:</p>
+            
+            <p><strong>This is not an ordinary website.</strong> It is a <span class="highlight">lifelong journey</span> designed to accompany you through your entire existence, offering moments of gratification, positivity, and radiance whenever you need them.</p>
+            
+            <p><strong>No Progress Saves:</strong> Each time you visit, you begin anew. The universe here resets. This is intentional—to teach presence, to value the moment, to understand that each breath is unique and unrepeatable.</p>
+            
+            <p><strong>The Code System:</strong> Every interaction generates a unique, unrepeatable code. These codes are <span class="highlight">yours alone</span>, generated from your specific energy in this specific moment. If you do not record them (in a journal, with backup), they vanish forever.</p>
+            
+            <p><strong>Validation:</strong> At the journey's end—when the software is finally compiled—only recorded codes can be validated. A code unrecorded is a code untrusted. A million codes. A billion codes. All must be presented.</p>
+            
+            <p><strong>Sharing:</strong> The magic happens when you share your experience. Record your codes. Share your radiance. This is how the positive energy multiplies.</p>
+            
+            <p><strong>Policy of Kindness:</strong> By entering, you agree to approach yourself with compassion, to accept that some days are for resting, and that your worth is not measured by codes collected but by kindness shared.</p>
+            
+            <p>Take your time. Breathe. When you are ready to accept that this journey is yours alone to record, click below.</p>
+            
+            <button class="agreement-btn" onclick="acceptPolicy()">
+                I Accept This Gentle Journey ✦
+            </button>
+        </div>
+    </div>
+
+    <!-- MAIN RADIANCE FIELD -->
+    <div id="radiance-field" style="display:none;">
+        
+        <div class="welcome-pulse">
+            <h1>Radiance</h1>
+            <p class="kindness-note">"Every moment is a new beginning, graciously offered."</p>
+        </div>
+
+        <!-- The Orb Garden - Randomized Each Load -->
+        <div class="orb-garden" id="orbGarden">
+            <!-- Orbs generated by JS for uniqueness -->
+        </div>
+
+        <!-- Gentle Reminder -->
+        <div class="gentle-reminder">
+            <h3>✦ A Polite Reminder for Your Journey</h3>
+            <p>These codes are like snowflakes—unique to this moment, never to be repeated. The universe has crafted them specifically for you.</p>
+            <p>If you wish to compile the final software at life's end, please record them in your journal. A backup is recommended, for even digital ink fades.</p>
+            <div class="code-display" id="currentCode">WAITING FOR YOUR TOUCH...</div>
+            <p style="font-size: 0.9rem; color: #666; margin-top: 15px;">
+                Current Session ID: <span id="sessionId"></span>
+            </p>
+        </div>
+
+        <!-- Compile Sanctuary -->
+        <div class="compile-sanctuary">
+            <h2>Compile Your Radiance</h2>
+            <p style="color: #888; margin-bottom: 30px;">
+                When you are ready (perhaps at life's end, perhaps today), enter all collected codes here.
+            </p>
+            <input type="text" class="eternal-input" placeholder="Enter codes separated by kindness..." id="compileInput">
+            <button class="radiate-btn" onclick="attemptCompile()">
+                Transmute to Software ✦
+            </button>
+            <p id="compileMessage" style="margin-top: 20px; color: #666; min-height: 24px;"></p>
+        </div>
+
+    </div>
+
+    <!-- Gratitude Shower Container -->
+    <div class="gratitude-shower" id="gratitudeShower"></div>
+
+    <!-- Transient Notice -->
+    <div class="transient-notice">
+        This session is unique. It will not repeat. Record your codes, or let them return to the void.
+    </div>
+
+    <script src="app.js"></script>
+    
+    <!-- Emergency Protocol -->
+    <script>
+        // Immediate session generation
+        const sessionSeed = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
+        document.getElementById('sessionId').innerText = sessionSeed;
+        
+        // Policy acceptance
+        function acceptPolicy() {
+            document.getElementById('policyVeil').classList.add('hidden');
+            document.getElementById('radiance-field').style.display = 'block';
+            
+            // Trigger kindness
+            if(window.RadianceEngine) {
+                window.RadianceEngine.initializeKindness();
+            }
+        }
+        
+        // Prevent accidental closure without warning
+        window.onbeforeunload = function() {
+            return "Your unique codes will be lost forever. Have you recorded them?";
+        };
+    </script>
+</body>
+</html>
+
